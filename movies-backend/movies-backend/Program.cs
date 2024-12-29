@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using movies_backend.Data;
+using movies_backend.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddControllers();
+
+// Add DbContext
 builder.Services.AddDbContext<ApplicationContext>(
     options => options.UseSqlServer("Name=ConnectionStrings:Default"));
+
+// Add beans for repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
@@ -21,5 +28,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();

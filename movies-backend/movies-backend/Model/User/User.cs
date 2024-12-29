@@ -17,6 +17,7 @@ public class User
     [Required]
     [MaxLength(50)]
     public string Password { get; set; } = null!;
+    [Required]
     public int UserRoleId { get; set; }
 
 
