@@ -17,6 +17,7 @@ builder.Services.AddDbContext<ApplicationContext>(
 
 // Add beans for repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IActorRepository, ActorRepository>();
 
 var app = builder.Build();
 
