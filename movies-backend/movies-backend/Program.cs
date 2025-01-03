@@ -18,6 +18,7 @@ builder.Services.AddDbContext<ApplicationContext>(
 // Add beans for repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IActorRepository, ActorRepository>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 
 var app = builder.Build();
 

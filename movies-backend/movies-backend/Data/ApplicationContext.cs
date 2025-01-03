@@ -23,10 +23,26 @@ public class ApplicationContext : DbContext
     public DbSet<Actor> Actors { get; set; }
     public DbSet<Movie> Movies { get; set; }
     public DbSet<MovieActor> MovieActors { get; set; }
+    public DbSet<MovieRating> MovieRatings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // Konfiguracja relacji MovieRating
+         modelBuilder.Entity<MovieRating>(entity =>
+         {
+             entity.ToTable("MovieRatings");
+             entity.HasKey(mr => mr.Id);
+
+             entity.HasOne(mr => mr.Movie)
+                 .WithMany(m => m.MovieRatings)
+                 .HasForeignKey(mr => mr.MovieId);
+
+             entity.HasOne(mr => mr.Rating)
+                 .WithMany(r => r.MovieRatings)
+                 .HasForeignKey(mr => mr.RatingId);
+         });
 
         modelBuilder.Entity<UserRole>().HasData(new List<UserRole>()
         {
@@ -95,6 +111,23 @@ public class ApplicationContext : DbContext
             new() { Id = 5, Title = "THE LUCKY ONE", Director = "SCOTT HICKS", ReleaseDate = new DateOnly(2012, 4, 20), Duration = 101, TmdbId = "77877" }
         });
 
+        // Przypisanie gatunków do filmów
+        modelBuilder.Entity<Movie>()
+            .HasMany(m => m.Genres)
+            .WithMany(g => g.Movies)
+            .UsingEntity(j => j.HasData(new[]
+            {
+                new { MoviesId = 1, GenresId = 1 }, // Spider Man - Action
+                new { MoviesId = 1, GenresId = 3 }, // Spider Man - Adventure
+                new { MoviesId = 2, GenresId = 2 }, // After - Romance
+                new { MoviesId = 2, GenresId = 4 }, // After - Drama
+                new { MoviesId = 3, GenresId = 1 }, // Transformers - Action
+                new { MoviesId = 3, GenresId = 5 }, // Transformers - Sci-Fi
+                new { MoviesId = 4, GenresId = 3 }, // Uncharted - Adventure
+                new { MoviesId = 5, GenresId = 2 }, // The Lucky One - Romance
+                new { MoviesId = 5, GenresId = 4 }  // The Lucky One - Drama
+            }));
+
         modelBuilder.Entity<MovieActor>().HasData(new List<MovieActor>()
         {
             new() { MovieId = 1, ActorId = 1, ActorRoleId = 1 },
@@ -110,6 +143,29 @@ public class ApplicationContext : DbContext
             new() { MovieId = 4, ActorId = 10, ActorRoleId = 2 },
             new() { MovieId = 5, ActorId = 9, ActorRoleId = 1 },
             new() { MovieId = 5, ActorId = 10, ActorRoleId = 2 }
+        });
+
+        modelBuilder.Entity<MovieRating>().HasData(new List<MovieRating>()
+        {
+            new() { Id = 1, MovieId = 1, RatingId = 5 },
+            new() { Id = 2, MovieId = 1, RatingId = 5 },
+            new() { Id = 3, MovieId = 1, RatingId = 4 },
+            new() { Id = 4, MovieId = 1, RatingId = 5 },
+            new() { Id = 5, MovieId = 2, RatingId = 2 },
+            new() { Id = 6, MovieId = 2, RatingId = 4 },
+            new() { Id = 7, MovieId = 2, RatingId = 3 },
+            new() { Id = 8, MovieId = 2, RatingId = 4 },
+            new() { Id = 9, MovieId = 3, RatingId = 1 },
+            new() { Id = 10, MovieId = 3, RatingId = 5 },
+            new() { Id = 11, MovieId = 3, RatingId = 1 },
+            new() { Id = 12, MovieId = 3, RatingId = 4 },
+            new() { Id = 13, MovieId = 3, RatingId = 5 },
+            new() { Id = 14, MovieId = 3, RatingId = 5 },
+            new() { Id = 15, MovieId = 4, RatingId = 4 },
+            new() { Id = 16, MovieId = 5, RatingId = 2 },
+            new() { Id = 17, MovieId = 5, RatingId = 4 },
+            new() { Id = 18, MovieId = 5, RatingId = 5 },
+            new() { Id = 19, MovieId = 5, RatingId = 5 }
         });
     }
 }

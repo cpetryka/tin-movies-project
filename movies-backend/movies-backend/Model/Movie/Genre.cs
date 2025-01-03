@@ -11,4 +11,6 @@ public class Genre
     [Required]
     [MaxLength(30)]
     public string Name { get; set; } = null!;
+
+    public ICollection<Movie> Movies { get; set; } = new HashSet<Movie>();
 }

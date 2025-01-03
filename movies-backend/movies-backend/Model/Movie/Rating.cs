@@ -10,4 +10,6 @@ public class Rating
     public int Id { get; set; }
     [Required]
     public int StarsNumber { get; set; }
+
+    public ICollection<MovieRating> MovieRatings { get; set; } = new HashSet<MovieRating>();
 }

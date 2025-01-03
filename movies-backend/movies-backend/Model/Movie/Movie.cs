@@ -22,6 +22,22 @@ public class Movie
     public string? TmdbId { get; set; } = null!;
 
     public ICollection<Genre> Genres { get; set; } = new HashSet<Genre>();
-    public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
     public ICollection<MovieActor> Actors { get; set; } = new HashSet<MovieActor>();
+    public ICollection<MovieRating> MovieRatings { get; set; } = new HashSet<MovieRating>();
+
+    public double GetAverageRating()
+    {
+        if (MovieRatings.Count == 0)
+        {
+            return 0;
+        }
+
+        double sum = 0;
+        foreach (var movieRating in MovieRatings)
+        {
+            sum += movieRating.Rating.StarsNumber;
+        }
+
+        return sum / MovieRatings.Count;
+    }
 }
