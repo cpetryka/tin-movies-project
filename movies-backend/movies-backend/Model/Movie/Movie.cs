@@ -19,7 +19,10 @@ public class Movie
     public DateOnly ReleaseDate { get; set; }
     [Required]
     public int Duration { get; set; }
-    public string? TmdbId { get; set; } = null!;
+    [Required]
+    public string TmdbId { get; set; } = null!;
+    [Required]
+    public string PosterUrl { get; set; } = null!;
 
     public ICollection<Genre> Genres { get; set; } = new HashSet<Genre>();
     public ICollection<MovieActor> Actors { get; set; } = new HashSet<MovieActor>();

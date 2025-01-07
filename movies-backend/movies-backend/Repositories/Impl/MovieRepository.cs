@@ -52,6 +52,8 @@ public class MovieRepository : IMovieRepository
     {
         var movie = await _context.Movies
             .Include(m => m.Genres)
+            .Include(m => m.MovieRatings)
+            .ThenInclude(mr => mr.Rating)
             .Include(m => m.Actors)
             .ThenInclude(ma => ma.Actor)
             .Include(m => m.Actors)
@@ -72,6 +74,7 @@ public class MovieRepository : IMovieRepository
             ReleaseDate = movie.ReleaseDate,
             Duration = movie.Duration,
             TmdbId = movie.TmdbId,
+            PosterUrl = movie.PosterUrl,
             AverageRating = movie.GetAverageRating(),
             Genres = movie.Genres.Select(g => new GetGenreDto { Name = g.Name }).ToList(),
             Actors = movie.Actors.Select(ma => new GetActorWithRoleDto
@@ -91,6 +94,8 @@ public class MovieRepository : IMovieRepository
     {
         var movie = await _context.Movies
             .Include(m => m.Genres)
+            .Include(m => m.MovieRatings)
+            .ThenInclude(mr => mr.Rating)
             .Include(m => m.Actors)
             .ThenInclude(ma => ma.Actor)
             .Include(m => m.Actors)
@@ -111,6 +116,7 @@ public class MovieRepository : IMovieRepository
             ReleaseDate = movie.ReleaseDate,
             Duration = movie.Duration,
             TmdbId = movie.TmdbId,
+            PosterUrl = movie.PosterUrl,
             AverageRating = movie.GetAverageRating(),
             Genres = movie.Genres.Select(g => new GetGenreDto { Name = g.Name }).ToList(),
             Actors = movie.Actors.Select(ma => new GetActorWithRoleDto
@@ -138,6 +144,8 @@ public class MovieRepository : IMovieRepository
     {
         var movies = await _context.Movies
             .Include(m => m.Genres)
+            .Include(m => m.MovieRatings)
+            .ThenInclude(mr => mr.Rating)
             .Include(m => m.Actors)
             .ThenInclude(ma => ma.Actor)
             .Include(m => m.Actors)
@@ -154,6 +162,7 @@ public class MovieRepository : IMovieRepository
             ReleaseDate = movie.ReleaseDate,
             Duration = movie.Duration,
             TmdbId = movie.TmdbId,
+            PosterUrl = movie.PosterUrl,
             AverageRating = movie.GetAverageRating(),
             Genres = movie.Genres.Select(g => new GetGenreDto { Name = g.Name }).ToList(),
             Actors = movie.Actors.Select(ma => new GetActorWithRoleDto
@@ -240,7 +249,8 @@ public class MovieRepository : IMovieRepository
             Director = addNewMovieDto.Director,
             ReleaseDate = new DateOnly(addNewMovieDto.ReleaseDate.Year, addNewMovieDto.ReleaseDate.Month, addNewMovieDto.ReleaseDate.Day),
             Duration = addNewMovieDto.Duration,
-            TmdbId = addNewMovieDto.TmdbId
+            TmdbId = addNewMovieDto.TmdbId,
+            PosterUrl = addNewMovieDto.PosterUrl
         };
 
         // Sprawdzenie istnienia gatunków

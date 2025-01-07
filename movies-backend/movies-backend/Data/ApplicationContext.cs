@@ -104,11 +104,11 @@ public class ApplicationContext : DbContext
 
         modelBuilder.Entity<Movie>().HasData(new List<Movie>()
         {
-            new() { Id = 1, Title = "SPIDER MAN NO WAY HOME", Director = "JON WATTS", ReleaseDate = new DateOnly(2021, 12, 17), Duration = 148, TmdbId = "634649" },
-            new() { Id = 2, Title = "AFTER", Director = "JENNY GAGE", ReleaseDate = new DateOnly(2019, 4, 12), Duration = 105, TmdbId = "537915" },
-            new() { Id = 3, Title = "TRANSFORMERS RISE OF THE BEASTS", Director = "STEVEN CAPLE JR", ReleaseDate = new DateOnly(2023, 6, 6), Duration = 128, TmdbId = "667538" },
-            new() { Id = 4, Title = "UNCHARTED", Director = "RUBEN FLEISCHER", ReleaseDate = new DateOnly(2022, 2, 10), Duration = 116, TmdbId = "335787" },
-            new() { Id = 5, Title = "THE LUCKY ONE", Director = "SCOTT HICKS", ReleaseDate = new DateOnly(2012, 4, 20), Duration = 101, TmdbId = "77877" }
+            new() { Id = 1, Title = "SPIDER MAN NO WAY HOME", Director = "JON WATTS", ReleaseDate = new DateOnly(2021, 12, 17), Duration = 148, TmdbId = "634649", PosterUrl = "https://image.tmdb.org/t/p/original/x8AOx0zIfpNKZ1eVW4fhmUiZNqU.jpg" },
+            new() { Id = 2, Title = "AFTER", Director = "JENNY GAGE", ReleaseDate = new DateOnly(2019, 4, 12), Duration = 105, TmdbId = "537915", PosterUrl = "https://image.tmdb.org/t/p/original/u3B2YKUjWABcxXZ6Nm9h10hLUbh.jpg" },
+            new() { Id = 3, Title = "TRANSFORMERS RISE OF THE BEASTS", Director = "STEVEN CAPLE JR", ReleaseDate = new DateOnly(2023, 6, 6), Duration = 128, TmdbId = "667538", PosterUrl = "https://image.tmdb.org/t/p/original/gPbM0MK8CP8A174rmUwGsADNYKD.jpg" },
+            new() { Id = 4, Title = "UNCHARTED", Director = "RUBEN FLEISCHER", ReleaseDate = new DateOnly(2022, 2, 10), Duration = 116, TmdbId = "335787", PosterUrl = "https://image.tmdb.org/t/p/original/rJHC1RUORuUhtfNb4Npclx0xnOf.jpg" },
+            new() { Id = 5, Title = "THE LUCKY ONE", Director = "SCOTT HICKS", ReleaseDate = new DateOnly(2012, 4, 20), Duration = 101, TmdbId = "77877", PosterUrl = "https://image.tmdb.org/t/p/original/vF1ZuIkF9Z71VzVvG265xJUawb0.jpg" }
         });
 
         // Przypisanie gatunków do filmów

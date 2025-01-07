@@ -8,7 +8,8 @@ public class GetMovieDto
     public string Director { get; set; } = null!;
     public DateOnly ReleaseDate { get; set; }
     public int Duration { get; set; }
-    public string? TmdbId { get; set; } = null!;
+    public string TmdbId { get; set; } = null!;
+    public string PosterUrl { get; set; } = null!;
     public double AverageRating { get; set; }
     public IList<GetGenreDto> Genres { get; set; } = new List<GetGenreDto>();
     public IList<GetActorWithRoleDto> Actors { get; set; } = new List<GetActorWithRoleDto>();

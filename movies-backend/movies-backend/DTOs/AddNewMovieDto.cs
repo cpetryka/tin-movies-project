@@ -14,7 +14,10 @@ public class AddNewMovieDto
     public DateTime ReleaseDate { get; set; }
     [Required]
     public int Duration { get; set; }
-    public string? TmdbId { get; set; }
+    [Required]
+    public string TmdbId { get; set; } = null!;
+    [Required]
+    public string PosterUrl { get; set; } = null!;
 
     public ICollection<ActorWithRoleDto> Actors { get; set; } = new List<ActorWithRoleDto>();
     public ICollection<string> Genres { get; set; } = new HashSet<string>();
