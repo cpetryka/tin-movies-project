@@ -130,4 +130,14 @@ public class ActorRepository : IActorRepository
             Name = ar.Name
         }).ToList();
     }
+
+    public async Task<ICollection<GetGenderDto>> GetAllGenders()
+    {
+        var gendersList = await _context.Genders.ToListAsync();
+
+        return gendersList.Select(g => new GetGenderDto
+        {
+            Name = g.Name
+        }).ToList();
+    }
 }

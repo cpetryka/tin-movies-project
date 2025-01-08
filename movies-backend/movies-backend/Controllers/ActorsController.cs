@@ -105,4 +105,12 @@ public class ActorsController : ControllerBase
             addedActorRoleId = id
         });
     }
+
+    [HttpGet("get-all-genders")]
+    public async Task<IActionResult> GetAllGenders()
+    {
+        var genders = await _actorRepository.GetAllGenders();
+
+        return Ok(genders);
+    }
 }

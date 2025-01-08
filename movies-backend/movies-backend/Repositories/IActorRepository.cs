@@ -14,4 +14,6 @@ public interface IActorRepository
     Task<bool> DoesActorRoleExist(int actorRoleId);
     Task<int> AddNewActorRole(string newActorRoleName);
     Task<ICollection<GetActorRoleDto>> GetAllActorRoles();
+
+    Task<ICollection<GetGenderDto>> GetAllGenders();
 }
