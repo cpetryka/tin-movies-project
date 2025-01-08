@@ -13,6 +13,7 @@ public interface IMovieRepository
     Task<bool> DoesMovieExist(int movieId);
     Task<GetMovieDto?> GetMovieById(int id);
     Task<GetMovieDto?> GetMovieByTitle(string title);
+    Task<GetMovieDto?> GetMovieByTmdbId(string tmdbId);
     Task<Double> GetAverageMovieRating(int movieId);
     Task<ICollection<GetMovieDto>> GetAllMovies();
     Task<int> AddNewMovie(AddNewMovieDto addNewMovieDto);

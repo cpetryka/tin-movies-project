@@ -131,6 +131,47 @@ public class MovieRepository : IMovieRepository
         };
     }
 
+    public async Task<GetMovieDto?> GetMovieByTmdbId(string tmdbId)
+    {
+        var movie = await _context.Movies
+            .Include(m => m.Genres)
+            .Include(m => m.MovieRatings)
+            .ThenInclude(mr => mr.Rating)
+            .Include(m => m.Actors)
+            .ThenInclude(ma => ma.Actor)
+            .Include(m => m.Actors)
+            .ThenInclude(ma => ma.ActorRole)
+            .Include(m => m.Actors)
+            .ThenInclude(ma => ma.Actor.Gender)
+            .FirstOrDefaultAsync(m => m.TmdbId == tmdbId);
+
+        if (movie == null)
+        {
+            return null;
+        }
+
+        return new GetMovieDto
+        {
+            Title = movie.Title,
+            Director = movie.Director,
+            ReleaseDate = movie.ReleaseDate,
+            Duration = movie.Duration,
+            TmdbId = movie.TmdbId,
+            PosterUrl = movie.PosterUrl,
+            AverageRating = movie.GetAverageRating(),
+            Genres = movie.Genres.Select(g => new GetGenreDto { Name = g.Name }).ToList(),
+            Actors = movie.Actors.Select(ma => new GetActorWithRoleDto
+            {
+                Name = ma.Actor.Name,
+                GenderName = ma.Actor.Gender.Name,
+                BirthDate = ma.Actor.BirthDate,
+                DeathDate = ma.Actor.DeathDate,
+                Biography = ma.Actor.Biography,
+                RoleName = ma.ActorRole.Name
+            }).ToList()
+        };
+    }
+
     public async Task<Double> GetAverageMovieRating(int movieId)
     {
         return await _context.Movies

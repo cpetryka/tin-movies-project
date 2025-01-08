@@ -55,6 +55,22 @@ public class MoviesController : ControllerBase
         return Ok(movie);
     }
 
+    [HttpGet("get-movie-by-tmdb-id")]
+    public async Task<IActionResult> GetMovieByTmdbId([FromQuery] string tmdbId)
+    {
+        var movie = await _movieRepository.GetMovieByTmdbId(tmdbId);
+
+        if (movie == null)
+        {
+            return NotFound(new
+            {
+                message = "Movie not found"
+            });
+        }
+
+        return Ok(movie);
+    }
+
     [HttpGet("get-average-movie-rating")]
     public async Task<IActionResult> GetAverageMovieRating([FromQuery] int movieId)
     {
