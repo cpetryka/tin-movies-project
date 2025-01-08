@@ -4,6 +4,7 @@ namespace movies_backend.DTOs;
 
 public class GetMovieDto
 {
+    public int Id { get; set; }
     public string Title { get; set; } = null!;
     public string Director { get; set; } = null!;
     public DateOnly ReleaseDate { get; set; }

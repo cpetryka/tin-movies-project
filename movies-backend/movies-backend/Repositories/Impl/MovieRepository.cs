@@ -69,6 +69,7 @@ public class MovieRepository : IMovieRepository
 
         return new GetMovieDto
         {
+            Id = movie.Id,
             Title = movie.Title,
             Director = movie.Director,
             ReleaseDate = movie.ReleaseDate,
@@ -111,6 +112,7 @@ public class MovieRepository : IMovieRepository
 
         return new GetMovieDto
         {
+            Id = movie.Id,
             Title = movie.Title,
             Director = movie.Director,
             ReleaseDate = movie.ReleaseDate,
@@ -152,6 +154,7 @@ public class MovieRepository : IMovieRepository
 
         return new GetMovieDto
         {
+            Id = movie.Id,
             Title = movie.Title,
             Director = movie.Director,
             ReleaseDate = movie.ReleaseDate,
@@ -198,6 +201,7 @@ public class MovieRepository : IMovieRepository
 
         return movies.Select(movie => new GetMovieDto
         {
+            Id = movie.Id,
             Title = movie.Title,
             Director = movie.Director,
             ReleaseDate = movie.ReleaseDate,
@@ -354,6 +358,24 @@ public class MovieRepository : IMovieRepository
         await _context.SaveChangesAsync();
 
         return movie.Id;
+    }
+
+    public async Task<ICollection<GetRatingDto>> GetMovieRatings(int movieId)
+    {
+        var movie = await _context.Movies
+            .Include(m => m.MovieRatings)
+            .ThenInclude(mr => mr.Rating)
+            .FirstOrDefaultAsync(m => m.Id == movieId);
+
+        if (movie == null)
+        {
+            return new List<GetRatingDto>();
+        }
+
+        return movie.MovieRatings.Select(mr => new GetRatingDto
+        {
+            StarsNumber = mr.Rating.StarsNumber
+        }).ToList();
     }
 
     public async Task<bool> AddMovieRating(int movieId, int ratingId)

@@ -94,6 +94,14 @@ public class MoviesController : ControllerBase
         });
     }
 
+    [HttpGet("get-movie-ratings")]
+    public async Task<IActionResult> GetMovieRatings([FromQuery] int movieId)
+    {
+        var ratings = await _movieRepository.GetMovieRatings(movieId);
+
+        return Ok(ratings);
+    }
+
     [HttpPost("add-movie-rating")]
     public async Task<IActionResult> AddMovieRating([FromQuery] int movieId, [FromQuery] int ratingId)
     {
