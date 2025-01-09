@@ -15,7 +15,6 @@ public class User
     [MaxLength(50)]
     public string Email { get; set; } = null!;
     [Required]
-    [MaxLength(50)]
     public string Password { get; set; } = null!;
     [Required]
     public int UserRoleId { get; set; }
@@ -23,4 +22,7 @@ public class User
 
     [ForeignKey(nameof(UserRoleId))]
     public UserRole UserRole { get; set; } = null!;
+
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiryTime { get; set; }
 }

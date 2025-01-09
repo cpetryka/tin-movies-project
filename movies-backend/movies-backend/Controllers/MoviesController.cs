@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using movies_backend.DTOs;
 using movies_backend.Repositories;
@@ -82,6 +83,7 @@ public class MoviesController : ControllerBase
         });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("add-new-movie")]
     public async Task<IActionResult> AddNewMovie([FromBody] AddNewMovieDto addNewMovieDto)
     {
@@ -102,6 +104,7 @@ public class MoviesController : ControllerBase
         return Ok(ratings);
     }
 
+    [Authorize(Roles = "User")]
     [HttpPost("add-movie-rating")]
     public async Task<IActionResult> AddMovieRating([FromQuery] int movieId, [FromQuery] int ratingId)
     {

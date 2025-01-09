@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using movies_backend.DTOs;
 using movies_backend.Repositories;
@@ -15,6 +16,7 @@ public class UsersController : ControllerBase
         _userRepository = userRepository;
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("add-new-user-role")]
     public async Task<IActionResult> AddNewUserRole([FromBody] AddNewUserRoleDto addNewUserRoleDto)
     {
