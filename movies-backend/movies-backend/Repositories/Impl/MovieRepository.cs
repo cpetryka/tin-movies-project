@@ -33,15 +33,58 @@ public class MovieRepository : IMovieRepository
         return genre.Id;
     }
 
+    public async Task<GetGenreDto?> UpdateGenreById(int genreId, string newGenreName)
+    {
+        var genre = await _context.Genres.FindAsync(genreId);
+
+        if (genre == null)
+        {
+            return null;
+        }
+
+        genre.Name = newGenreName;
+
+        await _context.SaveChangesAsync();
+
+        return new GetGenreDto
+        {
+            Id = genre.Id,
+            Name = genre.Name
+        };
+    }
+
+
     public async Task<ICollection<GetGenreDto>> GetAllGenres()
     {
         var genres = await _context.Genres.ToListAsync();
 
         return genres.Select(genre => new GetGenreDto
         {
+            Id = genre.Id,
             Name = genre.Name
         }).ToList();
     }
+
+    public async Task<GetGenreDto?> DeleteGenreById(int genreId)
+    {
+        var genre = await _context.Genres.FindAsync(genreId);
+
+        if (genre == null)
+        {
+            return null;
+        }
+
+        _context.Genres.Remove(genre);
+
+        await _context.SaveChangesAsync();
+
+        return new GetGenreDto
+        {
+            Id = genre.Id,
+            Name = genre.Name
+        };
+    }
+
 
     public async Task<bool> DoesMovieExist(int movieId)
     {

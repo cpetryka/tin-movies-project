@@ -143,4 +143,38 @@ public class MoviesController : ControllerBase
             addedGenreId = id
         });
     }
+
+    [HttpPut("update-genre-by-id")]
+    public async Task<IActionResult> UpdateGenreById([FromQuery] int genreId, [FromBody] string newGenreName)
+    {
+        var updatedGenre = await _movieRepository.UpdateGenreById(genreId, newGenreName);
+
+        if (updatedGenre == null)
+        {
+            return NotFound(new { message = "Genre not found." });
+        }
+
+        return Ok(new
+        {
+            message = "Genre updated successfully.",
+            updatedGenre
+        });
+    }
+
+    [HttpDelete("delete-genre-by-id")]
+    public async Task<IActionResult> DeleteGenreById([FromQuery] int genreId)
+    {
+        var deletedGenre = await _movieRepository.DeleteGenreById(genreId);
+
+        if (deletedGenre == null)
+        {
+            return NotFound(new { message = "Genre not found." });
+        }
+
+        return Ok(new
+        {
+            message = "Genre deleted successfully.",
+            deletedGenre
+        });
+    }
 }

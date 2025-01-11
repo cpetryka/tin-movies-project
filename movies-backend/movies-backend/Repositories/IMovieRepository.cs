@@ -9,7 +9,9 @@ public interface IMovieRepository
 
     Task<bool> DoesGenreExist(int genreId);
     Task<int> AddNewGenre(string newGenreName);
+    Task<GetGenreDto?> UpdateGenreById(int genreId, string newGenreName);
     Task<ICollection<GetGenreDto>> GetAllGenres();
+    Task<GetGenreDto?> DeleteGenreById(int genreId);
 
     Task<bool> DoesMovieExist(int movieId);
     Task<GetMovieDto?> GetMovieById(int id);
@@ -18,6 +20,7 @@ public interface IMovieRepository
     Task<Double> GetAverageMovieRating(int movieId);
     Task<ICollection<GetMovieDto>> GetAllMovies();
     Task<int> AddNewMovie(AddNewMovieDto addNewMovieDto);
+
     Task<ICollection<GetRatingDto>> GetMovieRatings(int movieId);
     Task<bool> AddMovieRating(int movieId, int ratingId);
 }
