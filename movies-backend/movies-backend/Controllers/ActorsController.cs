@@ -56,9 +56,9 @@ public class ActorsController : ControllerBase
     }
 
     [HttpPost("add-new-actor")]
-    public async Task<IActionResult> AddNewActor([FromBody] AddNewActorDto addNewActorDto)
+    public async Task<IActionResult> AddNewActor([FromBody] AddNewOrUpdateActorDto addNewOrUpdateActorDto)
     {
-        var id = await _actorRepository.AddNewActor(addNewActorDto);
+        var id = await _actorRepository.AddNewActor(addNewOrUpdateActorDto);
 
         return Created("", new
         {
@@ -67,10 +67,21 @@ public class ActorsController : ControllerBase
         });
     }
 
-    [HttpDelete("delete-actor")]
-    public async Task<IActionResult> DeleteActor([FromQuery] int id)
+    [HttpPut("update-actor-by-id")]
+    public async Task<IActionResult> UpdateActor([FromQuery] int actorId, [FromBody] AddNewOrUpdateActorDto addNewOrUpdateActorDto)
     {
-        var deletedStatus = await _actorRepository.DeleteActor(id);
+        var updatedActor = await _actorRepository.UpdateActorById(actorId, addNewOrUpdateActorDto);
+
+        if (updatedActor == null)
+            return NotFound("Actor not found.");
+
+        return Ok(updatedActor);
+    }
+
+    [HttpDelete("delete-actor-by-id")]
+    public async Task<IActionResult> DeleteActor([FromQuery] int actorId)
+    {
+        var deletedStatus = await _actorRepository.DeleteActor(actorId);
 
         if (!deletedStatus)
         {

@@ -5,7 +5,8 @@ namespace movies_backend.Repositories;
 public interface IActorRepository
 {
     Task<bool> DoesActorExist(int actorId);
-    Task<int> AddNewActor(AddNewActorDto addNewActorDto);
+    Task<int> AddNewActor(AddNewOrUpdateActorDto addNewOrUpdateActorDto);
+    Task<GetActorDto?> UpdateActorById(int id, AddNewOrUpdateActorDto addNewOrUpdateActorDto);
     Task<ICollection<GetActorDto>> GetAllActors();
     Task<GetActorDto?> GetActorById(int id);
     Task<GetActorDto?> GetActorByName(string name);

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace movies_backend.DTOs;
 
-public class AddNewActorDto
+public class AddNewOrUpdateActorDto
 {
     [Required]
     [MaxLength(50)]

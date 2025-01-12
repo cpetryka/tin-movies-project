@@ -19,21 +19,54 @@ public class ActorRepository : IActorRepository
         return await _context.Actors.AnyAsync(a => a.Id == actorId);
     }
 
-    public async Task<int> AddNewActor(AddNewActorDto addNewActorDto)
+    public async Task<int> AddNewActor(AddNewOrUpdateActorDto addNewOrUpdateActorDto)
     {
         var actor = new Actor
         {
-            Name = addNewActorDto.Name,
-            GenderId = addNewActorDto.GenderId,
-            BirthDate = new DateOnly(addNewActorDto.BirthDate.Year, addNewActorDto.BirthDate.Month, addNewActorDto.BirthDate.Day),
-            DeathDate = new DateOnly(addNewActorDto.DeathDate.Year, addNewActorDto.DeathDate.Month, addNewActorDto.DeathDate.Day),
-            Biography = addNewActorDto.Biography
+            Name = addNewOrUpdateActorDto.Name,
+            GenderId = addNewOrUpdateActorDto.GenderId,
+            BirthDate = new DateOnly(addNewOrUpdateActorDto.BirthDate.Year, addNewOrUpdateActorDto.BirthDate.Month, addNewOrUpdateActorDto.BirthDate.Day),
+            DeathDate = new DateOnly(addNewOrUpdateActorDto.DeathDate.Year, addNewOrUpdateActorDto.DeathDate.Month, addNewOrUpdateActorDto.DeathDate.Day),
+            Biography = addNewOrUpdateActorDto.Biography
         };
 
         await _context.Actors.AddAsync(actor);
         await _context.SaveChangesAsync();
 
         return actor.Id;
+    }
+
+    public async Task<GetActorDto?> UpdateActorById(int id, AddNewOrUpdateActorDto addNewOrUpdateActorDto)
+    {
+        /*if (addNewOrUpdateActorDto == null)
+            throw new ArgumentNullException(nameof(addNewOrUpdateActorDto));*/
+
+        var actor = await _context.Actors
+            .Include(a => a.Gender)
+            .FirstOrDefaultAsync(a => a.Id == id);
+        if (actor == null)
+            return null; // Actor not found
+
+        // Update actor's properties
+        actor.Name = addNewOrUpdateActorDto.Name;
+        actor.GenderId = addNewOrUpdateActorDto.GenderId;
+        actor.BirthDate = new DateOnly(addNewOrUpdateActorDto.BirthDate.Year, addNewOrUpdateActorDto.BirthDate.Month, addNewOrUpdateActorDto.BirthDate.Day);
+        actor.DeathDate = new DateOnly(addNewOrUpdateActorDto.DeathDate.Year, addNewOrUpdateActorDto.DeathDate.Month,
+            addNewOrUpdateActorDto.DeathDate.Day);
+        actor.Biography = addNewOrUpdateActorDto.Biography;
+
+        // Save changes
+        await _context.SaveChangesAsync();
+
+        return new GetActorDto
+        {
+            Id = actor.Id,
+            Name = actor.Name,
+            GenderName = actor.Gender.Name,
+            BirthDate = actor.BirthDate,
+            DeathDate = actor.DeathDate,
+            Biography = actor.Biography
+        };
     }
 
     public async Task<ICollection<GetActorDto>> GetAllActors()
@@ -44,7 +77,9 @@ public class ActorRepository : IActorRepository
 
         return actorsList.Select(actor => new GetActorDto
         {
+            Id = actor.Id,
             Name = actor.Name,
+            GenderId = actor.GenderId,
             GenderName = actor.Gender.Name,
             BirthDate = actor.BirthDate,
             DeathDate = actor.DeathDate,
@@ -65,7 +100,9 @@ public class ActorRepository : IActorRepository
 
         return new GetActorDto()
         {
+            Id = actor.Id,
             Name = actor.Name,
+            GenderId = actor.GenderId,
             GenderName = actor.Gender.Name,
             BirthDate = actor.BirthDate,
             DeathDate = actor.DeathDate,
@@ -86,7 +123,9 @@ public class ActorRepository : IActorRepository
 
         return new GetActorDto()
         {
+            Id = actor.Id,
             Name = actor.Name,
+            GenderId = actor.GenderId,
             GenderName = actor.Gender.Name,
             BirthDate = actor.BirthDate,
             DeathDate = actor.DeathDate,
@@ -94,14 +133,14 @@ public class ActorRepository : IActorRepository
         };
     }
 
-    public async Task<bool> DeleteActor(int id)
+    public async Task<bool> DeleteActor(int actorId)
     {
-        if (!DoesActorExist(id).Result)
+        if (!DoesActorExist(actorId).Result)
         {
             return false;
         }
 
-        _context.Actors.Remove(new Actor { Id = id });
+        _context.Actors.Remove(new Actor { Id = actorId });
         await _context.SaveChangesAsync();
 
         return true;
