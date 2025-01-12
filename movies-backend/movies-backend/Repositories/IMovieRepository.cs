@@ -19,7 +19,12 @@ public interface IMovieRepository
     Task<GetMovieDto?> GetMovieByTmdbId(string tmdbId);
     Task<Double> GetAverageMovieRating(int movieId);
     Task<ICollection<GetMovieDto>> GetAllMovies();
+    Task<ICollection<GetMovieDto>> GetAllMoviesSegmented(int page, int pageSize);
+    Task<(ICollection<GetMovieDto> Movies, int TotalCount)> GetAllMoviesWithCount(int page, int pageSize);
     Task<int> AddNewMovie(AddNewMovieDto addNewMovieDto);
+    Task<GetMovieDto?> UpdateMovieById(int movieId, AddNewMovieDto addNewMovieDto);
+    Task<bool> DeleteMovie(int movieId);
+    Task<ICollection<GetMovieDto>> SearchMoviesAsync(string query);
 
     Task<ICollection<GetRatingDto>> GetMovieRatings(int movieId);
     Task<bool> AddMovieRating(int movieId, int ratingId);

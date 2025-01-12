@@ -24,6 +24,36 @@ public class MoviesController : ControllerBase
         return Ok(movies);
     }
 
+    [HttpGet("get-all-movies-segmented")]
+    public async Task<IActionResult> GetAllMoviesSegmented([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        if (page < 1 || pageSize < 1)
+        {
+            return BadRequest("Page and page size must be greater than 0.");
+        }
+
+        var movies = await _movieRepository.GetAllMoviesSegmented(page, pageSize);
+        return Ok(movies);
+    }
+
+    [HttpGet("get-all-movies-with-count")]
+    public async Task<IActionResult> GetAllMovies([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        if (page < 1 || pageSize < 1)
+        {
+            return BadRequest("Page and page size must be greater than 0.");
+        }
+
+        var (movies, totalCount) = await _movieRepository.GetAllMoviesWithCount(page, pageSize);
+
+        return Ok(new
+        {
+            Movies = movies,
+            TotalCount = totalCount
+        });
+    }
+
+
     [HttpGet("get-movie-by-id")]
     public async Task<IActionResult> GetMovieById([FromQuery] int id)
     {
@@ -94,6 +124,55 @@ public class MoviesController : ControllerBase
             message = "Movie added successfully",
             addedMovieId = movieId
         });
+    }
+
+    [HttpPut("update-movie-by-id")]
+    public async Task<IActionResult> UpdateMovie([FromQuery] int movieId, [FromBody] AddNewMovieDto addNewMovieDto)
+    {
+        try
+        {
+            var updatedMovie = await _movieRepository.UpdateMovieById(movieId, addNewMovieDto);
+            if (updatedMovie == null)
+            {
+                return NotFound($"Movie with ID {movieId} not found.");
+            }
+            return Ok(updatedMovie);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("delete-movie-by-id")]
+    public async Task<IActionResult> DeleteMovie([FromQuery] int movieId)
+    {
+        try
+        {
+            var result = await _movieRepository.DeleteMovie(movieId);
+            if (!result)
+            {
+                return NotFound($"Movie with ID {movieId} not found.");
+            }
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> Search([FromQuery] string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return BadRequest("Query cannot be empty.");
+        }
+
+        var results = await _movieRepository.SearchMoviesAsync(query);
+
+        return Ok(results);
     }
 
     [HttpGet("get-movie-ratings")]
