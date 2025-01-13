@@ -28,6 +28,7 @@ public class MoviesController : ControllerBase
         return Ok(genres);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("add-new-genre")]
     public async Task<IActionResult> AddNewGenre([FromBody] string genreName)
     {
@@ -40,6 +41,7 @@ public class MoviesController : ControllerBase
         });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("update-genre-by-id")]
     public async Task<IActionResult> UpdateGenreById([FromQuery] int genreId, [FromBody] string newGenreName)
     {
@@ -57,6 +59,7 @@ public class MoviesController : ControllerBase
         });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("delete-genre-by-id")]
     public async Task<IActionResult> DeleteGenreById([FromQuery] int genreId)
     {
@@ -200,6 +203,7 @@ public class MoviesController : ControllerBase
         });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("update-movie-by-id")]
     public async Task<IActionResult> UpdateMovie([FromQuery] int movieId, [FromBody] AddNewMovieDto addNewMovieDto)
     {
@@ -218,6 +222,7 @@ public class MoviesController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("delete-movie-by-id")]
     public async Task<IActionResult> DeleteMovie([FromQuery] int movieId)
     {

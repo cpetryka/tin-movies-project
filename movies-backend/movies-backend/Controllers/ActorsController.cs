@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using movies_backend.DTOs;
 using movies_backend.Repositories;
@@ -39,6 +40,7 @@ public class ActorsController : ControllerBase
         return Ok(actorRoles);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("add-new-actor-role")]
     public async Task<IActionResult> AddNewActorRole([FromBody] String addNewActorRoleDto)
     {
@@ -95,6 +97,7 @@ public class ActorsController : ControllerBase
         return Ok(actors);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("add-new-actor")]
     public async Task<IActionResult> AddNewActor([FromBody] AddNewOrUpdateActorDto addNewOrUpdateActorDto)
     {
@@ -107,6 +110,7 @@ public class ActorsController : ControllerBase
         });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("update-actor-by-id")]
     public async Task<IActionResult> UpdateActor([FromQuery] int actorId, [FromBody] AddNewOrUpdateActorDto addNewOrUpdateActorDto)
     {
@@ -118,6 +122,7 @@ public class ActorsController : ControllerBase
         return Ok(updatedActor);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("delete-actor-by-id")]
     public async Task<IActionResult> DeleteActor([FromQuery] int actorId)
     {
