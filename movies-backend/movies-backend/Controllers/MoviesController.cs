@@ -16,43 +16,67 @@ public class MoviesController : ControllerBase
         _movieRepository = movieRepository;
     }
 
-    [HttpGet("get-all-movies")]
-    public async Task<IActionResult> GetAllMovies()
-    {
-        var movies = await _movieRepository.GetAllMovies();
+    /*************************************************************************************************
+     * GENRES MANAGEMENT
+     *************************************************************************************************/
 
-        return Ok(movies);
+    [HttpGet("get-all-genres")]
+    public async Task<IActionResult> GetAllGenres()
+    {
+        var genres = await _movieRepository.GetAllGenres();
+
+        return Ok(genres);
     }
 
-    [HttpGet("get-all-movies-segmented")]
-    public async Task<IActionResult> GetAllMoviesSegmented([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    [HttpPost("add-new-genre")]
+    public async Task<IActionResult> AddNewGenre([FromBody] string genreName)
     {
-        if (page < 1 || pageSize < 1)
+        var id = await _movieRepository.AddNewGenre(genreName);
+
+        return Created("", new
         {
-            return BadRequest("Page and page size must be greater than 0.");
-        }
-
-        var movies = await _movieRepository.GetAllMoviesSegmented(page, pageSize);
-        return Ok(movies);
-    }
-
-    [HttpGet("get-all-movies-with-count")]
-    public async Task<IActionResult> GetAllMovies([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
-    {
-        if (page < 1 || pageSize < 1)
-        {
-            return BadRequest("Page and page size must be greater than 0.");
-        }
-
-        var (movies, totalCount) = await _movieRepository.GetAllMoviesWithCount(page, pageSize);
-
-        return Ok(new
-        {
-            Movies = movies,
-            TotalCount = totalCount
+            message = "Genre added successfully",
+            addedGenreId = id
         });
     }
 
+    [HttpPut("update-genre-by-id")]
+    public async Task<IActionResult> UpdateGenreById([FromQuery] int genreId, [FromBody] string newGenreName)
+    {
+        var updatedGenre = await _movieRepository.UpdateGenreById(genreId, newGenreName);
+
+        if (updatedGenre == null)
+        {
+            return NotFound(new { message = "Genre not found." });
+        }
+
+        return Ok(new
+        {
+            message = "Genre updated successfully.",
+            updatedGenre
+        });
+    }
+
+    [HttpDelete("delete-genre-by-id")]
+    public async Task<IActionResult> DeleteGenreById([FromQuery] int genreId)
+    {
+        var deletedGenre = await _movieRepository.DeleteGenreById(genreId);
+
+        if (deletedGenre == null)
+        {
+            return NotFound(new { message = "Genre not found." });
+        }
+
+        return Ok(new
+        {
+            message = "Genre deleted successfully.",
+            deletedGenre
+        });
+    }
+
+    /*************************************************************************************************
+     * MOVIES MANAGEMENT
+     *************************************************************************************************/
 
     [HttpGet("get-movie-by-id")]
     public async Task<IActionResult> GetMovieById([FromQuery] int id)
@@ -100,6 +124,56 @@ public class MoviesController : ControllerBase
         }
 
         return Ok(movie);
+    }
+
+    [HttpGet("get-all-movies")]
+    public async Task<IActionResult> GetAllMovies()
+    {
+        var movies = await _movieRepository.GetAllMovies();
+
+        return Ok(movies);
+    }
+
+    [HttpGet("get-all-movies-segmented")]
+    public async Task<IActionResult> GetAllMoviesSegmented([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        if (page < 1 || pageSize < 1)
+        {
+            return BadRequest("Page and page size must be greater than 0.");
+        }
+
+        var movies = await _movieRepository.GetAllMoviesSegmented(page, pageSize);
+        return Ok(movies);
+    }
+
+    [HttpGet("get-all-movies-segmented-with-count")]
+    public async Task<IActionResult> GetAllMoviesSegmentedWithCount([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        if (page < 1 || pageSize < 1)
+        {
+            return BadRequest("Page and page size must be greater than 0.");
+        }
+
+        var (movies, totalCount) = await _movieRepository.GetAllMoviesSegmentedWithCount(page, pageSize);
+
+        return Ok(new
+        {
+            Movies = movies,
+            TotalCount = totalCount
+        });
+    }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> Search([FromQuery] string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return BadRequest("Query cannot be empty.");
+        }
+
+        var results = await _movieRepository.SearchMoviesAsync(query);
+
+        return Ok(results);
     }
 
     [HttpGet("get-average-movie-rating")]
@@ -162,18 +236,9 @@ public class MoviesController : ControllerBase
         }
     }
 
-    [HttpGet("search")]
-    public async Task<IActionResult> Search([FromQuery] string query)
-    {
-        if (string.IsNullOrWhiteSpace(query))
-        {
-            return BadRequest("Query cannot be empty.");
-        }
-
-        var results = await _movieRepository.SearchMoviesAsync(query);
-
-        return Ok(results);
-    }
+    /*************************************************************************************************
+     * RATINGS MANAGEMENT
+     *************************************************************************************************/
 
     [HttpGet("get-movie-ratings")]
     public async Task<IActionResult> GetMovieRatings([FromQuery] int movieId)
@@ -245,59 +310,5 @@ public class MoviesController : ControllerBase
         }
 
         return NoContent();
-    }
-
-    [HttpGet("get-all-genres")]
-    public async Task<IActionResult> GetAllGenres()
-    {
-        var genres = await _movieRepository.GetAllGenres();
-
-        return Ok(genres);
-    }
-
-    [HttpPost("add-new-genre")]
-    public async Task<IActionResult> AddNewGenre([FromBody] string genreName)
-    {
-        var id = await _movieRepository.AddNewGenre(genreName);
-
-        return Created("", new
-        {
-            message = "Genre added successfully",
-            addedGenreId = id
-        });
-    }
-
-    [HttpPut("update-genre-by-id")]
-    public async Task<IActionResult> UpdateGenreById([FromQuery] int genreId, [FromBody] string newGenreName)
-    {
-        var updatedGenre = await _movieRepository.UpdateGenreById(genreId, newGenreName);
-
-        if (updatedGenre == null)
-        {
-            return NotFound(new { message = "Genre not found." });
-        }
-
-        return Ok(new
-        {
-            message = "Genre updated successfully.",
-            updatedGenre
-        });
-    }
-
-    [HttpDelete("delete-genre-by-id")]
-    public async Task<IActionResult> DeleteGenreById([FromQuery] int genreId)
-    {
-        var deletedGenre = await _movieRepository.DeleteGenreById(genreId);
-
-        if (deletedGenre == null)
-        {
-            return NotFound(new { message = "Genre not found." });
-        }
-
-        return Ok(new
-        {
-            message = "Genre deleted successfully.",
-            deletedGenre
-        });
     }
 }

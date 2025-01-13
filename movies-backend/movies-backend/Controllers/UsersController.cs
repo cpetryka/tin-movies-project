@@ -16,6 +16,10 @@ public class UsersController : ControllerBase
         _userRepository = userRepository;
     }
 
+    /*************************************************************************************************
+     * USER ROLES MANAGEMENT
+     *************************************************************************************************/
+
     [Authorize(Roles = "Admin")]
     [HttpPost("add-new-user-role")]
     public async Task<IActionResult> AddNewUserRole([FromBody] AddNewUserRoleDto addNewUserRoleDto)
@@ -40,16 +44,24 @@ public class UsersController : ControllerBase
         });
     }
 
-    [HttpPost("add-new-user")]
-    public async Task<IActionResult> AddNewUser([FromBody] AddNewUserDto addNewUserDto)
-    {
-        var id = await _userRepository.AddNewUser(addNewUserDto.Name, addNewUserDto.Email, addNewUserDto.Password, addNewUserDto.UserRoleId);
+    /*************************************************************************************************
+     * USERS MANAGEMENT
+     *************************************************************************************************/
 
-        return Created("", new
+    [HttpGet("get-user-by-id")]
+    public async Task<IActionResult> GetUserById([FromQuery] int id)
+    {
+        var user = await _userRepository.GetUserById(id);
+
+        if (user == null)
         {
-            message = "User added successfully",
-            addedUserId = id
-        });
+            return NotFound(new
+            {
+                message = "User not found"
+            });
+        }
+
+        return Ok(user);
     }
 
     [HttpGet("get-user-by-email")]
@@ -68,28 +80,24 @@ public class UsersController : ControllerBase
         return Ok(user);
     }
 
-    [HttpGet("get-user-by-id")]
-    public async Task<IActionResult> GetUserById([FromQuery] int id)
-    {
-        var user = await _userRepository.GetUserById(id);
-
-        if (user == null)
-        {
-            return NotFound(new
-            {
-                message = "User not found"
-            });
-        }
-
-        return Ok(user);
-    }
-
     [HttpGet("get-all-users")]
     public async Task<IActionResult> GetAllUsers()
     {
         var users = await _userRepository.GetAllUsers();
 
         return Ok(users);
+    }
+
+    [HttpPost("add-new-user")]
+    public async Task<IActionResult> AddNewUser([FromBody] AddNewUserDto addNewUserDto)
+    {
+        var id = await _userRepository.AddNewUser(addNewUserDto.Name, addNewUserDto.Email, addNewUserDto.Password, addNewUserDto.UserRoleId);
+
+        return Created("", new
+        {
+            message = "User added successfully",
+            addedUserId = id
+        });
     }
 
     [HttpDelete("delete-user")]

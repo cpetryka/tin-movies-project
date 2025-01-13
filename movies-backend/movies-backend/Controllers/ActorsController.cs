@@ -15,13 +15,45 @@ public class ActorsController : ControllerBase
         _actorRepository = actorRepository;
     }
 
-    [HttpGet("get-all-actors")]
-    public async Task<IActionResult> GetAllActors()
-    {
-        var actors = await _actorRepository.GetAllActors();
+    /*************************************************************************************************
+     * GENDERS MANAGEMENT
+     *************************************************************************************************/
 
-        return Ok(actors);
+    [HttpGet("get-all-genders")]
+    public async Task<IActionResult> GetAllGenders()
+    {
+        var genders = await _actorRepository.GetAllGenders();
+
+        return Ok(genders);
     }
+
+    /*************************************************************************************************
+     * ACTOR ROLES MANAGEMENT
+     *************************************************************************************************/
+
+    [HttpGet("get-all-actor-roles")]
+    public async Task<IActionResult> GetAllActorRoles()
+    {
+        var actorRoles = await _actorRepository.GetAllActorRoles();
+
+        return Ok(actorRoles);
+    }
+
+    [HttpPost("add-new-actor-role")]
+    public async Task<IActionResult> AddNewActorRole([FromBody] String addNewActorRoleDto)
+    {
+        var id = await _actorRepository.AddNewActorRole(addNewActorRoleDto);
+
+        return Created("", new
+        {
+            message = "Actor role added successfully",
+            addedActorRoleId = id
+        });
+    }
+
+    /*************************************************************************************************
+     * ACTORS MANAGEMENT
+     *************************************************************************************************/
 
     [HttpGet("get-actor-by-id")]
     public async Task<IActionResult> GetActorById([FromQuery] int id)
@@ -53,6 +85,14 @@ public class ActorsController : ControllerBase
         }
 
         return Ok(actor);
+    }
+
+    [HttpGet("get-all-actors")]
+    public async Task<IActionResult> GetAllActors()
+    {
+        var actors = await _actorRepository.GetAllActors();
+
+        return Ok(actors);
     }
 
     [HttpPost("add-new-actor")]
@@ -95,33 +135,5 @@ public class ActorsController : ControllerBase
         {
             message = "Actor deleted successfully"
         });
-    }
-
-    [HttpGet("get-all-actor-roles")]
-    public async Task<IActionResult> GetAllActorRoles()
-    {
-        var actorRoles = await _actorRepository.GetAllActorRoles();
-
-        return Ok(actorRoles);
-    }
-
-    [HttpPost("add-new-actor-role")]
-    public async Task<IActionResult> AddNewActorRole([FromBody] String addNewActorRoleDto)
-    {
-        var id = await _actorRepository.AddNewActorRole(addNewActorRoleDto);
-
-        return Created("", new
-        {
-            message = "Actor role added successfully",
-            addedActorRoleId = id
-        });
-    }
-
-    [HttpGet("get-all-genders")]
-    public async Task<IActionResult> GetAllGenders()
-    {
-        var genders = await _actorRepository.GetAllGenders();
-
-        return Ok(genders);
     }
 }

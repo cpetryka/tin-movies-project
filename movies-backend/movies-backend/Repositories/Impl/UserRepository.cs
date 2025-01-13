@@ -14,6 +14,10 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
+    /*************************************************************************************************
+     * USER ROLES MANAGEMENT
+     *************************************************************************************************/
+
     public async Task<bool> DoesUserRoleExist(int userRoleId)
     {
         return await _context.UserRoles.AnyAsync(ur => ur.Id == userRoleId);
@@ -41,45 +45,13 @@ public class UserRepository : IUserRepository
         return true;
     }
 
+    /*************************************************************************************************
+     * USERS MANAGEMENT
+     *************************************************************************************************/
+
     public async Task<bool> DoesUserExist(int userId)
     {
         return await _context.Users.AnyAsync(u => u.Id == userId);
-    }
-
-    public async Task<int> AddNewUser(string name, string email, string password, int userRoleId)
-    {
-        var user = new User
-        {
-            Name = name,
-            Email = email,
-            Password = password,
-            UserRoleId = userRoleId
-        };
-
-        await _context.AddAsync(user);
-        await _context.SaveChangesAsync();
-
-        return user.Id;
-    }
-
-    public async Task<GetUserDto?> GetUserByEmail(string email)
-    {
-        var user = await _context.Users
-            .Include(u => u.UserRole)
-            .FirstOrDefaultAsync(u => u.Email == email);
-
-        if (user == null)
-        {
-            return null;
-        }
-
-        return new GetUserDto
-        {
-            Name = user.Name,
-            Email = user.Email,
-            Password = user.Password,
-            UserRoleName = user.UserRole.Name
-        };
     }
 
     public async Task<GetUserDto?> GetUserById(int id)
@@ -103,6 +75,26 @@ public class UserRepository : IUserRepository
 
     }
 
+    public async Task<GetUserDto?> GetUserByEmail(string email)
+    {
+        var user = await _context.Users
+            .Include(u => u.UserRole)
+            .FirstOrDefaultAsync(u => u.Email == email);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        return new GetUserDto
+        {
+            Name = user.Name,
+            Email = user.Email,
+            Password = user.Password,
+            UserRoleName = user.UserRole.Name
+        };
+    }
+
     public async Task<ICollection<GetUserDto>> GetAllUsers()
     {
         var users = await _context.Users
@@ -118,6 +110,22 @@ public class UserRepository : IUserRepository
             Password = user.Password,
             UserRoleName = user.UserRole.Name
         }).ToList();
+    }
+
+    public async Task<int> AddNewUser(string name, string email, string password, int userRoleId)
+    {
+        var user = new User
+        {
+            Name = name,
+            Email = email,
+            Password = password,
+            UserRoleId = userRoleId
+        };
+
+        await _context.AddAsync(user);
+        await _context.SaveChangesAsync();
+
+        return user.Id;
     }
 
     public async Task<bool> DeleteUser(int id)
