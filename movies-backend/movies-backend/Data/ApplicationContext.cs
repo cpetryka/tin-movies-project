@@ -53,8 +53,8 @@ public class ApplicationContext : DbContext
 
         modelBuilder.Entity<User>().HasData(new List<User>()
         {
-            new() { Id = 1, Name = "Czarek", Email = "cezaryp10@gmail.com", Password = "1234", UserRoleId = 1 },
-            new() { Id = 2, Name = "John", Email = "john@gmail.com", Password = "1234", UserRoleId = 2 }
+            new() { Id = 1, Name = "admin", Email = "admin@ml.com", Password = "$2a$11$jjnh0h2tuCQlFhCjtiHLOOmFf/8mLHJYbIpnl95heuTC.yHVEcvYC", UserRoleId = 1 },
+            new() { Id = 2, Name = "user", Email = "user@ml.com", Password = "$2a$11$jjnh0h2tuCQlFhCjtiHLOOmFf/8mLHJYbIpnl95heuTC.yHVEcvYC", UserRoleId = 2 }
         });
 
         modelBuilder.Entity<Genre>().HasData(new List<Genre>()
