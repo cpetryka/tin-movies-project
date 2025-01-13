@@ -649,6 +649,11 @@ public class MovieRepository : IMovieRepository
 
     public async Task<bool> AddMovieRating(int movieId, int ratingId, int userId)
     {
+        if(await _context.MovieRatings.AnyAsync(mr => mr.MovieId == movieId && mr.UserId == userId))
+        {
+            return false;
+        }
+
         var movie = await _context.Movies
             .Include(m => m.MovieRatings)
             .FirstOrDefaultAsync(m => m.Id == movieId);
