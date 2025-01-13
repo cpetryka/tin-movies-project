@@ -183,11 +183,19 @@ public class MoviesController : ControllerBase
         return Ok(ratings);
     }
 
+    [HttpGet("get-all-movie-ratings-added-by")]
+    public async Task<IActionResult> GetAllMovieRatingsAddedBy([FromQuery] int userId)
+    {
+        var ratings = await _movieRepository.GetAllMovieRatingsAddedBy(userId);
+
+        return Ok(ratings);
+    }
+
     [Authorize(Roles = "User")]
     [HttpPost("add-movie-rating")]
-    public async Task<IActionResult> AddMovieRating([FromQuery] int movieId, [FromQuery] int ratingId)
+    public async Task<IActionResult> AddMovieRating([FromQuery] int movieId, [FromQuery] int ratingId, [FromQuery] int userId)
     {
-        var success = await _movieRepository.AddMovieRating(movieId, ratingId);
+        var success = await _movieRepository.AddMovieRating(movieId, ratingId, userId);
 
         if (!success)
         {
@@ -201,6 +209,42 @@ public class MoviesController : ControllerBase
         {
             message = "Rating added successfully"
         });
+    }
+
+    [HttpPut("update-movie-rating-added-by")]
+    public async Task<IActionResult> UpdateMovieRatingAddedBy([FromQuery] int movieId, [FromQuery] int userId, [FromQuery] int newRatingId)
+    {
+        var updatedRating = await _movieRepository.UpdateMovieRatingAddedBy(movieId, userId, newRatingId);
+
+        if (updatedRating == null)
+        {
+            return NotFound(new
+            {
+                message = "Rating not found"
+            });
+        }
+
+        return Ok(new
+        {
+            message = "Rating updated successfully",
+            updatedRating
+        });
+    }
+
+    [HttpDelete("delete-movie-rating-added-by")]
+    public async Task<IActionResult> DeleteMovieRatingAddedBy([FromQuery] int movieId, [FromQuery] int userId)
+    {
+        var success = await _movieRepository.DeleteMovieRatingAddedBy(movieId, userId);
+
+        if (!success)
+        {
+            return BadRequest(new
+            {
+                message = "Rating not found"
+            });
+        }
+
+        return NoContent();
     }
 
     [HttpGet("get-all-genres")]

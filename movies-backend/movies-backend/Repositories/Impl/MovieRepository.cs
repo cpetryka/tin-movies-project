@@ -723,6 +723,24 @@ public class MovieRepository : IMovieRepository
         }).ToList();
     }
 
+    public async Task<ICollection<GetRatingWithMovieDto>> GetAllMovieRatingsAddedBy(int userId)
+    {
+        return await _context.MovieRatings
+            .Include(mr => mr.Movie)
+            .Include(mr => mr.Rating)
+            .Where(mr => mr.UserId == userId)
+            .Select(mr => new GetRatingWithMovieDto
+            {
+                MovieRatingId = mr.Id,
+                MovieId = mr.MovieId,
+                MovieTitle = mr.Movie.Title,
+                MovieDirector = mr.Movie.Director,
+                MovieReleaseDate = mr.Movie.ReleaseDate,
+                StarsNumber = mr.Rating.StarsNumber
+            })
+            .ToListAsync();
+    }
+
     public async Task<bool> AddMovieRating(int movieId, int ratingId)
     {
         var movie = await _context.Movies
@@ -747,6 +765,79 @@ public class MovieRepository : IMovieRepository
             RatingId = ratingId
         });
 
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> AddMovieRating(int movieId, int ratingId, int userId)
+    {
+        var movie = await _context.Movies
+            .Include(m => m.MovieRatings)
+            .FirstOrDefaultAsync(m => m.Id == movieId);
+
+        if (movie == null)
+        {
+            return false;
+        }
+
+        var rating = await _context.Ratings.FirstOrDefaultAsync(r => r.Id == ratingId);
+
+        if (rating == null)
+        {
+            return false;
+        }
+
+        movie.MovieRatings.Add(new MovieRating
+        {
+            MovieId = movieId,
+            RatingId = ratingId,
+            UserId = userId
+        });
+
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<GetRatingWithMovieDto?> UpdateMovieRatingAddedBy(int movieId, int userId, int newRatingId)
+    {
+        var movieRating = await _context.MovieRatings
+            .Include(mr => mr.Movie)
+            .Include(mr => mr.Rating)
+            .FirstOrDefaultAsync(mr => mr.MovieId == movieId && mr.UserId == userId);
+
+        if (movieRating == null)
+        {
+            return null;
+        }
+
+        movieRating.RatingId = newRatingId;
+        await _context.SaveChangesAsync();
+
+        return new GetRatingWithMovieDto
+        {
+            MovieRatingId = movieRating.Id,
+            MovieId = movieRating.MovieId,
+            MovieTitle = movieRating.Movie.Title,
+            MovieDirector = movieRating.Movie.Director,
+            MovieReleaseDate = movieRating.Movie.ReleaseDate,
+            StarsNumber = movieRating.Rating.StarsNumber
+        };
+    }
+
+    public async Task<bool> DeleteMovieRatingAddedBy(int movieId, int userId)
+    {
+        var movieRating = await _context.MovieRatings
+            .FirstOrDefaultAsync(m => m.MovieId == movieId && m.UserId == userId);
+
+        if (movieRating == null)
+        {
+            throw new Exception($"Rating for movie with ID {movieId} added by user with ID {userId} not found.");
+        }
+
+        // Remove related actors and genres if necessary
+        _context.MovieRatings.Remove(movieRating);
         await _context.SaveChangesAsync();
 
         return true;
