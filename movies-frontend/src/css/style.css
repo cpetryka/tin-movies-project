@@ -1,0 +1,587 @@
+@charset "UTF-8";
+/********************************************************************************
+ * FONTS
+ ********************************************************************************/
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+/********************************************************************************
+ * RESET
+ ********************************************************************************/
+/* 1. Use a more-intuitive box-sizing model */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* 2. Remove default margin */
+* {
+  margin: 0;
+}
+
+body {
+  /* 3. Add accessible line-height */
+  line-height: 1.5;
+  /* 4. Improve text rendering */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 5. Improve media defaults */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* 6. Inherit fonts for form controls */
+input, button, textarea, select {
+  font: inherit;
+}
+
+/* 7. Avoid text overflows */
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/* 8. Remove list styles */
+ul, ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/*
+  9. Create a root stacking context
+*/
+#root, #__next {
+  isolation: isolate;
+}
+
+/********************************************************************************
+ * GENREAL
+ ********************************************************************************/
+body {
+  background-image: url("../img/background.png");
+  background-size: cover;
+  background-attachment: fixed;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'IBM Plex Sans Condensed', sans-serif;
+}
+
+.clearfix {
+  clear: both;
+}
+
+.standard-icon-size {
+  width: 0.9em;
+  height: 0.9em;
+}
+
+.form-error {
+  font-weight: bold;
+  color: #f00;
+  margin-top: 10px;
+}
+
+.separator {
+  border: 1px dashed #000;
+  margin: 30px 4px 15px;
+}
+
+.languageSwitcher {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 1000;
+}
+.languageSwitcher button {
+  background-color: #f1356d;
+  color: #fff;
+  cursor: pointer;
+  border: 1px solid #fff;
+  width: 40px;
+  height: 40px;
+  opacity: 0.85;
+}
+.languageSwitcher button:hover {
+  background-color: #ea0e50;
+}
+
+/********************************************************************************
+ * MAIN STYLES: HOMEPAGE, SEARCH PAGE, ...
+ ********************************************************************************/
+#main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 50px;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
+}
+#main-header #logo {
+  width: 25%;
+}
+#main-header #logo img {
+  width: 90px;
+  border-radius: 2px;
+}
+#main-header #main-menu {
+  width: 50%;
+}
+#main-header #main-menu ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+}
+#main-header #main-menu ul a {
+  color: #fff;
+  margin-right: 20px;
+  text-decoration: none;
+}
+#main-header #header-search {
+  width: 25%;
+  text-align: right;
+}
+#main-header #header-search input {
+  padding: 8px;
+  margin-right: 4px;
+  border: none;
+  border-radius: 4px;
+}
+#main-header #header-search button {
+  padding: 8px;
+  background-color: #f1356d;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#main-header #header-search button:hover {
+  background-color: #ea0e50;
+}
+
+#main-section,
+#movie-info-main-section {
+  width: 85%;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f1f1f1;
+}
+
+.movie-box {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.movie-box .movie-box-poster img {
+  width: 120px;
+  height: auto;
+  border-radius: 4px;
+}
+.movie-box .movie-box-details {
+  margin-left: 16px;
+  flex: 1;
+}
+.movie-box .movie-box-details .title {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+  text-align: left;
+}
+.movie-box .movie-box-details .release {
+  font-size: 0.9em;
+  color: #666;
+  margin: 8px 0;
+}
+.movie-box .movie-box-details .rating {
+  font-size: 1.2em;
+  color: #ff9800;
+  font-weight: bold;
+}
+.movie-box .movie-box-details a {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #007BFF;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+.movie-box .movie-box-details a:hover {
+  background-color: #0056b3;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+.pagination button {
+  display: inline-block;
+  color: black;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  background-color: #ddd;
+  border: 0;
+}
+.pagination button:hover:not(.active) {
+  background-color: #bbb;
+}
+.pagination button.active {
+  background-color: #007BFF;
+  color: white;
+}
+
+#footer {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  text-align: center;
+  padding: 15px 0;
+}
+
+@media all and (max-width: 600px) {
+  #main-section {
+    width: 90%;
+  }
+}
+@media all and (max-width: 1000px) {
+  #main-header {
+    flex-direction: column;
+  }
+  #main-header #logo,
+  #main-header #main-menu,
+  #main-header #header-search {
+    width: 100% !important;
+    text-align: center;
+  }
+  #main-header #main-menu,
+  #main-header #header-search {
+    margin-top: 20px;
+  }
+  #main-header #logo a {
+    display: inline-block;
+    text-align: center;
+  }
+}
+@media all and (max-width: 1200px) {
+  #main-header {
+    padding: 15px 30px;
+  }
+  #main-header #logo {
+    width: 30%;
+  }
+  #main-header #logo img {
+    width: 70px;
+  }
+  #main-header #main-menu {
+    width: 40%;
+  }
+  #main-header #main-menu ul {
+    font-size: 1em;
+  }
+  #main-header #header-search {
+    width: 30%;
+  }
+}
+/********************************************************************************
+ * MOVIE DETAILS
+ ********************************************************************************/
+#movie-info-main-section h2 {
+  font-size: 1.8em;
+  margin-top: 20px;
+  text-align: center;
+}
+#movie-info-main-section #movie-title {
+  font-size: 2.5em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #222;
+  text-align: center;
+}
+#movie-info-main-section #movie-detailed-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+}
+#movie-info-main-section #movie-detailed-info .movie-poster img {
+  width: 200px;
+  height: auto;
+  border-radius: 8px;
+}
+#movie-info-main-section #movie-detailed-info .movie-details {
+  flex: 1;
+}
+#movie-info-main-section #movie-detailed-info .movie-details .title {
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+#movie-info-main-section #movie-detailed-info .movie-details p {
+  margin: 8px 0;
+  font-size: 1em;
+}
+#movie-info-main-section #movie-detailed-info .movie-details span {
+  font-weight: bold;
+  color: #555;
+}
+#movie-info-main-section #movie-cast {
+  margin-top: 20px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+}
+#movie-info-main-section #movie-cast .movie-cast-member {
+  padding: 20px 0;
+  border-bottom: 1px solid #ddd;
+}
+#movie-info-main-section #movie-cast .movie-cast-member:last-child {
+  border-bottom: none;
+}
+#movie-info-main-section #movie-cast .movie-cast-member .actor-name {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+#movie-info-main-section #movie-cast .movie-cast-member .actor-biography {
+  margin-top: 10px;
+  color: #555;
+  font-size: 0.9em;
+  white-space: pre-line;
+}
+#movie-info-main-section #movie-cast .movie-cast-member span {
+  font-weight: bold;
+  color: #555;
+}
+#movie-info-main-section #reviews {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+#movie-info-main-section #reviews .movie-review {
+  background-color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: 1.2em;
+  color: #ff9800;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+#movie-info-main-section #add-new-review {
+  margin-top: 20px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+}
+#movie-info-main-section #add-new-review h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+#movie-info-main-section #add-new-review form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+#movie-info-main-section #add-new-review form input[type="radio"] {
+  display: none;
+}
+#movie-info-main-section #add-new-review form label {
+  cursor: pointer;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  border: 1px solid #ddd;
+  padding: 8px 15px;
+  border-radius: 8px;
+}
+#movie-info-main-section #add-new-review form label ion-icon {
+  color: #ff9800;
+  font-size: 1.5em;
+}
+#movie-info-main-section #add-new-review form label:hover ion-icon {
+  color: #cc7b00;
+}
+#movie-info-main-section #add-new-review form input[type="radio"]:checked + label ion-icon {
+  color: #cc7b00;
+}
+#movie-info-main-section #add-new-review form button {
+  padding: 8px 15px;
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+#movie-info-main-section #add-new-review form button:hover {
+  background-color: #ff5722;
+}
+
+@media all and (max-width: 800px) {
+  #movie-detailed-info {
+    flex-direction: column;
+    text-align: center;
+  }
+  #movie-detailed-info .movie-poster {
+    margin: 0 auto;
+  }
+  #movie-detailed-info .movie-details {
+    margin-top: 10px;
+  }
+}
+/********************************************************************************
+ * ADD NEW MOVIE / ACTOR
+ ********************************************************************************/
+#add-new-entity-form {
+  margin-top: 30px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+}
+#add-new-entity-form input,
+#add-new-entity-form select,
+#add-new-entity-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1em;
+  transition: border-color 0.3s ease;
+}
+#add-new-entity-form input:focus,
+#add-new-entity-form select:focus,
+#add-new-entity-form textarea:focus {
+  border-color: #2196f3;
+  outline: none;
+  box-shadow: 0 0 4px rgba(33, 150, 243, 0.5);
+}
+#add-new-entity-form select {
+  height: auto;
+  /* Aby obsłużyć listy z wieloma opcjami */
+  font-size: 1em;
+  cursor: pointer;
+  background-color: #f9f9f9;
+}
+#add-new-entity-form select option {
+  padding: 5px 10px;
+}
+#add-new-entity-form button[type="submit"] {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-top: 15px;
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+#add-new-entity-form button[type="submit"]:hover {
+  background-color: #ff5722;
+}
+#add-new-entity-form button[type="submit"]:focus {
+  outline: none;
+  box-shadow: 0 0 6px rgba(255, 87, 34, 0.6);
+}
+
+/********************************************************************************
+ * LOGIN / REGISTER
+ ********************************************************************************/
+#login-logo-wrapper {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+#login-logo-wrapper img {
+  width: 150px;
+  border-radius: 2px;
+}
+
+#login-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #fff;
+  text-align: center;
+}
+
+#login {
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 8px;
+  padding: 45px 30px;
+  width: 40%;
+}
+#login h1 {
+  margin-bottom: 20px;
+}
+#login input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 4px;
+}
+#login button {
+  width: 100%;
+  padding: 10px;
+  background-color: #f1356d;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#login button:hover {
+  background-color: #ea0e50;
+}
+#login p {
+  margin-top: 30px;
+}
+#login p a {
+  color: #fff;
+}
+
+@media screen and (max-width: 600px) {
+  #login {
+    width: 70%;
+  }
+}
+@media screen and (max-width: 1200px) {
+  #login {
+    width: 60%;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */
